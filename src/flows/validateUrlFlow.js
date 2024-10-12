@@ -1,5 +1,5 @@
-import { addKeyword, EVENTS } from "@builderbot/bot";
-import { formatCommands } from "../services/utils";
+import { addKeyword } from "@builderbot/bot";
+import { formatCommands } from "../services/utils.js";
 
 export const validateUrlFlow = addKeyword("/validarurl").addAnswer(
     formatCommands("*(👨‍💻En desarrollo...)* Escribe la URL que deseas validar:"),
