@@ -13,9 +13,8 @@
   "dependencies": {
     "@builderbot/bot": "1.2.2",
     "@builderbot/provider-baileys": "1.2.2",
-    "@img/sharp-win32-x64": "^0.33.5",
-    "axios": "^1.7.7",
     "dotenv": "^16.4.5",
+    "moongose": "^1.0.0",
     "openai": "^4.66.1",
     "sharp": "^0.33.5"
   },

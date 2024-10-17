@@ -3,13 +3,22 @@ import { MemoryDB as Database } from "@builderbot/bot";
 import { BaileysProvider as Provider } from "@builderbot/provider-baileys";
 import { generalFlow } from "./flows/generalFlow.js";
 import { helpFlow } from "./flows/helpFlow.js";
-import { configureBotRoutes } from './routes/botRoutes.js';
 import { validateUrlFlow } from "./flows/validateUrlFlow.js";
+import { configureMiddleware } from "./config/server/middleware.js";
+import { configureContactRoutes } from "./routes/contactRoutes.js";
+import { configureAlertRoutes } from "./routes/alertRoutes.js";
+import { connectDB } from "./services/dbService.js";
+import { learnFlow } from './flows/learnFlow.js';
+import dotenv from 'dotenv';
 
-const PORT = process.env.PORT ?? 3000;
+dotenv.config();
+
+const PORT = process.env.PORT;
 
 const main = async () => {
-    const adapterFlow = createFlow([generalFlow, helpFlow, validateUrlFlow]);
+    await connectDB();
+
+    const adapterFlow = createFlow([generalFlow, helpFlow, validateUrlFlow, learnFlow]);
     const adapterProvider = createProvider(Provider);
     const adapterDB = new Database();
 
@@ -19,7 +28,10 @@ const main = async () => {
         database: adapterDB,
     });
 
-    configureBotRoutes(adapterProvider, handleCtx);
+    configureMiddleware(adapterProvider);
+    configureContactRoutes(adapterProvider, handleCtx);
+    configureAlertRoutes(adapterProvider, handleCtx);
+
     httpServer(+PORT);
 };
 

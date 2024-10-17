@@ -2,25 +2,19 @@ import { openai } from '../config/openai.js';
 
 const conversationHistory = {};
 
-export const getGptResponse = async (ctx, userId, message) => {
-
-    if (!conversationHistory[userId]) {
-        conversationHistory[userId] = [];
-    }
-
-    let messages = [
+const getSystemMessages = (ctx) => {
+    const systemMessages = [
         {
             role: "system",
-            content: "Cada vez qwue lo veas conveniente y saludes presentate. Eres ML SecureBot, un asistente en ciberseguridad creado para brindar ayuda a través de WhatsApp. Proporcionas información y recomendaciones de manera amigable y efectiva."
+            content: "Cada vez que lo veas conveniente y saludes presentate. Eres ML SecureBot, un asistente en ciberseguridad creado para brindar ayuda a través de WhatsApp. Proporcionas información y recomendaciones de manera amigable y efectiva."
         },
         {
             role: "system",
-            content: "No puedes responder a temas que no tengan que ver con ciberseguridad, y no puedes responder a temas que no estén relacionados con la ciberseguridad."
+            content: "No puedes responder a temas que no estén relacionados con la ciberseguridad."
         },
-        ...conversationHistory[userId].slice(-25),
         {
             role: "system",
-            content: "Cada que puedas y en la conversación tenga sentido, recuérdale al usuario que puede escribir el comando /ayuda para obtener una lista de las funcionalidades disponibles del bot."
+            content: "Si es necesario, y cada que lo veas conveniente, recuérdale al usuario que tambien puede escribir el comando /ayuda para obtener una lista de las funcionalidades disponibles del bot. Cuando te presentas, siempre debes recordarle al usuario que puede escribir el comando /ayuda para obtener una lista de las funcionalidades disponibles del bot."
         },
         {
             role: "system",
@@ -28,15 +22,33 @@ export const getGptResponse = async (ctx, userId, message) => {
         },
     ];
 
-    conversationHistory[userId].push({ role: "user", content: message });
-    messages.push({ role: "user", content: message });
-
     if (ctx.fromReturn === true) {
-        messages.unshift({
+        systemMessages.unshift({
             role: "system",
             content: "El usuario salió del menú de /ayuda y volvió a la conversación general",
         });
     }
+
+    return systemMessages;
+};
+
+const handleOpenAiError = (error) => {
+    console.error("Error al consultar OpenAI:", error);
+    return "Lo siento, no pude procesar tu solicitud en este momento.";
+};
+
+export const getGptResponse = async (ctx, userId, message) => {
+    if (!conversationHistory[userId]) {
+        conversationHistory[userId] = [];
+    }
+
+    let messages = [
+        ...getSystemMessages(ctx),
+        ...conversationHistory[userId].slice(-25),
+        { role: "user", content: message }
+    ];
+
+    conversationHistory[userId].push({ role: "user", content: message });
 
     try {
         const response = await openai.chat.completions.create({
@@ -58,7 +70,6 @@ export const getGptResponse = async (ctx, userId, message) => {
 
         return assistantResponse;
     } catch (error) {
-        console.error("Error al consultar OpenAI:", error);
-        return "Lo siento, no pude procesar tu solicitud en este momento.";
+        return handleOpenAiError(error);
     }
 };
