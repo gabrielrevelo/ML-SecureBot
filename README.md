@@ -8,6 +8,14 @@ Este proyecto ha sido desarrollado para la hackathon de creación de producto m�
 
 **MundoLinux** es una empresa dedicada a la seguridad de la información, enfocada en brindar soluciones de ciberseguridad que protejan tanto a empresas como a usuarios finales. A través de capacitación, servicios de monitoreo y consultoría en seguridad, MundoLinux ayuda a sus clientes a mantenerse protegidos en un entorno digital cada vez más complejo y amenazante.
 
+## Tecnologías Utilizadas
+
+El bot ha sido desarrollado principalmente utilizando **BuilderBot**, un framework gratuito y de código abierto diseñado para crear chatbots y aplicaciones inteligentes que se conectan a diferentes canales de comunicación, como WhatsApp, Telegram y otros.
+
+BuilderBot ofrece una forma intuitiva y extensible de construir chatbots, permitiendo que puedas tener tu primer bot funcionando en cuestión de minutos.
+
+[Documentacion Oficial BuilderBot](https://www.builderbot.app/en)
+
 ## Pasos de Instalación
 
 ### 1. Clonar el repositorio
@@ -123,3 +131,29 @@ Tell a contact on your WhatsApp to write "hello"...
 ```
 
 Esto significa que el bot ya está en funcionamiento. Puedes probarlo enviando cualquier mensaje por WhatsApp a la cuenta conectada, y el bot responderá automáticamente.
+
+## API Rest
+
+Este proyecto expone una API REST:
+
+### Endpoints:
+
+#### **Alertas**:
+
+- **POST `/v1/alert`**: Este endpoint envía una alerta a los contactos almacenados en la base de datos. Si se proporcionan números de teléfono específicos, la alerta solo se envía a esos contactos. De lo contrario, se envía a todos los contactos que no estén excluidos.
+
+#### **Contactos**:
+
+- **POST `/v1/contacts`**: Crea un nuevo contacto en la base de datos. Se requiere el nombre y número de teléfono del contacto.
+- **GET `/v1/contacts`**: Devuelve una lista de todos los contactos almacenados en la base de datos.
+- **PUT `/v1/contacts/:id`**: Actualiza un contacto existente identificado por su ID. Permite modificar cualquier campo, como el nombre o número de teléfono.
+- **DELETE `/v1/contacts/:id`**: Elimina un contacto existente de la base de datos, identificado por su ID. Si el contacto no existe, devuelve un error 404.
+
+| Método HTTP | Endpoint           | Parámetros de Entrada                                                                                                                                      | Respuesta                                                                        |
+| ----------- | ------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------- |
+| **POST**    | `/v1/alert`        | `message` (string) - Mensaje de la alerta<br>`urlMedia` (string, opcional) - URL del medio (imagen, video, etc.)<br>`phones` (array, opcional) - Teléfonos | `"Alerta enviada"` en caso de éxito, o un mensaje de error                       |
+| **POST**    | `/v1/contacts`     | `name` (string) - Nombre del contacto<br>`phone` (string) - Número de teléfono                                                                             | `"Contacto creado"` con el objeto del contacto creado                            |
+| **GET**     | `/v1/contacts`     | Ninguno                                                                                                                                                    | `"Contactos obtenidos"` con el listado de contactos                              |
+| **PUT**     | `/v1/contacts/:id` | `id` (string) - ID del contacto<br>`name` (string, opcional) - Nuevo nombre<br>`phone` (string, opcional) - Nuevo teléfono                                 | `"Contacto actualizado"` con el objeto del contacto actualizado                  |
+| **DELETE**  | `/v1/contacts/:id` | `id` (string) - ID del contacto                                                                                                                            | `"Contacto eliminado"` con el objeto del contacto eliminado o error si no existe |
+
