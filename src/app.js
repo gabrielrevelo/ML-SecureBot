@@ -7,7 +7,7 @@ import { validateUrlFlow } from "./flows/validateUrlFlow.js";
 import { configureMiddleware } from "./config/server/middleware.js";
 import { configureContactRoutes } from "./routes/contactRoutes.js";
 import { configureAlertRoutes } from "./routes/alertRoutes.js";
-import { connectDB } from "./services/dbService.js";
+//import { connectDB } from "./services/dbService.js";
 import { learnFlow } from './flows/learnFlow.js';
 import dotenv from 'dotenv';
 
@@ -16,7 +16,7 @@ dotenv.config();
 const PORT = process.env.PORT;
 
 const main = async () => {
-    await connectDB();
+  //  await connectDB();
 
     const adapterFlow = createFlow([generalFlow, helpFlow, validateUrlFlow, learnFlow]);
     const adapterProvider = createProvider(Provider);
@@ -31,6 +31,7 @@ const main = async () => {
     configureMiddleware(adapterProvider);
     configureContactRoutes(adapterProvider, handleCtx);
     configureAlertRoutes(adapterProvider, handleCtx);
+
 
     httpServer(+PORT);
 };
