@@ -13,6 +13,7 @@
   "dependencies": {
     "@builderbot/bot": "1.2.2",
     "@builderbot/provider-baileys": "1.2.2",
+    "axios": "^1.7.7",
     "dotenv": "^16.4.5",
     "moongose": "^1.0.0",
     "openai": "^4.66.1",
