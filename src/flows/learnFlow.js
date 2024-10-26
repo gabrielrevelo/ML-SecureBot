@@ -1,8 +1,13 @@
 import { addKeyword } from "@builderbot/bot";
-import { formatCommands } from "../services/utils.js";
+import { getGptResponse } from "../services/gptService.js";
+import { formatResponse } from "../services/utils.js";
 
-export const learnFlow = addKeyword("/aprender")
-    // TODO: Implementar la lógica del comando /aprender
-    .addAnswer(
-        formatCommands("*(👨‍💻En desarrollo...)* Opción /aprender seleccionada"),
-    );
+export const learnFlow = addKeyword("/ciberprueba").addAction(
+    async (ctx, { flowDynamic }) => {
+        const userMessage = ctx.body.trim();
+        const userId = ctx.from;
+        ctx.fromLearn = true;
+        const gptResponse = await getGptResponse(ctx, userId, userMessage);
+        await flowDynamic(formatResponse(gptResponse));
+    }
+);

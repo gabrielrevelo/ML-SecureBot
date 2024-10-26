@@ -1,8 +1,14 @@
-export function formatCommands(assistantResponse) {
-    let assistantResponseArray = assistantResponse.split(" ");
+export function formatResponse(assistantResponse) {
+    let formattedResponse = assistantResponse.replace(/\*\*(.*?)\*\*/g, '*$1*');
+
+    let assistantResponseArray = formattedResponse.split(" ");
 
     assistantResponseArray = assistantResponseArray.map(word => {
-        return /^\/\w+/.test(word) ? "`" + word + "`" : word;
+        if (/^\/\w+/.test(word)) {
+            return "`" + word + "`";
+        } else {
+            return word;
+        }
     });
 
     return assistantResponseArray.join(" ");

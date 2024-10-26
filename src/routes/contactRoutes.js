@@ -6,7 +6,6 @@ export const configureContactRoutes = (provider, handleCtx) => {
         handleCtx(
             async (bot, req, res) => {
                 const { name, phone } = req.body;
-                console.log("Creando contacto:", name, phone);
 
                 try {
                     const newContact = new Contact({ name, phone });
@@ -27,7 +26,6 @@ export const configureContactRoutes = (provider, handleCtx) => {
             async (bot, req, res) => {
                 try {
                     const contacts = await Contact.find();
-                    console.log("Contactos:", contacts);
 
                     return res.json("Contactos obtenidos", { contacts }, 200);
                 } catch (error) {

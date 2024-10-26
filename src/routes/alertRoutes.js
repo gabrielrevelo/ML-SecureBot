@@ -7,7 +7,6 @@ export const configureAlertRoutes = (provider, handleCtx) => {
         handleCtx(
             async (bot, req, res) => {
                 const { message, urlMedia, phones } = req.body;
-                console.log("Enviando alerta:", message, urlMedia);
 
                 try {
                     let contacts;
