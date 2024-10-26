@@ -12,7 +12,7 @@ export const helpFlow = addKeyword("/ayuda").addAnswer(
             "",
             "   • /validarurl - ¿Tienes dudas sobre un enlace? Yo lo reviso por ti y te digo si es seguro. 🔍🌐",
             "   • /ciberprueba - ¿Quieres poner a prueba tus conocimientos? Inicia este divertido test de ciberseguridad. 🎮📚",
-            "   • /emergencia - ¿Necesitas ayuda urgente? Obtén el contacto directo con nuestro centro de asistencia para emergencias cibernéticas. 🚨📞",
+            "   • /emergencia - ¿Necesitas ayuda urgente? Obtén el contacto para comunicarte con nuestro *Centro de Asistencia para Emergencias Cibernéticas* de *Mundo Linux*. 🚨📞",
             "",
             "3. *Consejos de seguridad*: Puedo proporcionarte recomendaciones prácticas para mejorar tu seguridad en línea. 💪",
             "",

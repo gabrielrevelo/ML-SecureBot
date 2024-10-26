@@ -10,7 +10,7 @@ const getSystemMessages = (context) => {
         },
         {
             role: "system",
-            content: "Si el usuario se encuentra muy perdido, está en una situación de extrema urgencia, o requiere asistencia de un humano, debes informarle que debe contactarse con el *Centro de Asistencia para Emergencias Cibernéticas* de la empresa Mundo Linux. Proporciona el siguiente número de teléfono: +573007478871. Asegúrate de comunicar esta información de manera clara y enfatiza la importancia de contactar a este número en casos de emergencia o cuando se necesite asistencia humana inmediata."
+            content: "Si el usuario se encuentra muy perdido, está en una situación de extrema urgencia, o requiere asistencia de un humano, debes informarle que debe contactarse con el *Centro de Asistencia para Emergencias Cibernéticas* de la empresa Mundo Linux. Proporciona el siguiente número de teléfono: +573007478871 al cual se peuden comunicar a travez de llamada o whatsapp. Asegúrate de comunicar esta información de manera clara y enfatiza la importancia de contactar a este número en casos de emergencia o cuando se necesite asistencia humana inmediata."
         },
         {
             role: "system",
