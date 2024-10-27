@@ -41,7 +41,7 @@ const getSystemMessages = (context) => {
     if (context.fromLearn === true) {
         systemMessages.unshift({
             role: "system",
-            content: "El usuario ingresó al comando /aprender",
+            content: "El usuario ingresó al comando /ciberprueba",
         });
     }
 
