@@ -11,14 +11,23 @@ export const configureAlertRoutes = (provider, handleCtx) => {
                 try {
                     let contacts;
 
-                    if (phones) {
-                        contacts = await Contact.find({ phone: { $in: phones } });
+                    if (phones && Array.isArray(phones)) {
+                        for (const phone of phones) {
+                            try {
+                                await bot.sendMessage(phone, message, { media: urlMedia ?? null });
+                            } catch (sendError) {
+                                console.error(`Error al enviar mensaje a ${phone}:`, sendError);
+                            }
+                        }
                     } else {
                         contacts = await Contact.find({ exclude: false });
-                    }
-
-                    for (const contact of contacts) {
-                        await bot.sendMessage(contact.phone, message, { media: urlMedia ?? null });
+                        for (const contact of contacts) {
+                            try {
+                                await bot.sendMessage(contact.phone, message, { media: urlMedia ?? null });
+                            } catch (sendError) {
+                                console.error(`Error al enviar mensaje a ${contact.phone}:`, sendError);
+                            }
+                        }
                     }
 
                     const newAlert = new Alert({ message, urlMedia, phones });
