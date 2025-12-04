@@ -5,7 +5,20 @@ import { validateUrlFlow } from './validateUrlFlow.js';
 import { learnFlow } from './learnFlow.js';
 
 export const generalFlow = addKeyword(EVENTS.WELCOME).addAction(
-    async (ctx, { flowDynamic, gotoFlow }) => {
+    async (ctx, { provider, gotoFlow }) => {
+        // Obtener el número correcto según addressingMode
+        let phoneNumber;
+        if (ctx.key?.addressingMode === 'lid') {
+            // Si es lid, usa remoteJidAlt
+            phoneNumber = ctx.key.remoteJidAlt;
+        } else {
+            // Si es pn, usa remoteJid
+            phoneNumber = ctx.key?.remoteJid || ctx.from;
+        }
+        
+        // Extraer SOLO el número limpio sin @s.whatsapp.net ni @lid
+        const cleanNumber = phoneNumber.split('@')[0];
+        
         const userMessage = ctx.body.trim();
         switch (userMessage) {
             case "/validarurl":
@@ -14,9 +27,8 @@ export const generalFlow = addKeyword(EVENTS.WELCOME).addAction(
                 return gotoFlow(learnFlow);
             default:
                 {
-                    const userId = ctx.from;
-                    const gptResponse = await getGptResponse(ctx, userId, userMessage);
-                    await flowDynamic(formatResponse(gptResponse));
+                    const gptResponse = await getGptResponse(ctx, cleanNumber, userMessage);
+                    await provider.sendMessage(phoneNumber, formatResponse(gptResponse), {});
                 }
         }
     }

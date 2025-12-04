@@ -94,11 +94,22 @@ export const validateUrlFlow = addKeyword("/validarurl")
     .addAnswer(
         formatResponse("🔍 Escribe la URL que deseas validar:"),
         { capture: true },
-        async (ctx, { flowDynamic }) => {
+        async (ctx, { provider }) => {
+            // Obtener el número correcto según addressingMode
+            let phoneNumber;
+            if (ctx.key?.addressingMode === 'lid') {
+                phoneNumber = ctx.key.remoteJidAlt;
+            } else {
+                phoneNumber = ctx.key?.remoteJid || ctx.from;
+            }
+            
+            // Extraer SOLO el número limpio
+            const cleanNumber = phoneNumber.split('@')[0];
+            
             let url = ctx.body.trim();
             
             if (!esUrlValida(url)) {
-                await flowDynamic(formatResponse(`❌ La URL proporcionada no es válida: ${url}`));
+                await provider.sendMessage(phoneNumber, formatResponse(`❌ La URL proporcionada no es válida: ${url}`), {});
                 return;
             }
             
@@ -111,9 +122,9 @@ export const validateUrlFlow = addKeyword("/validarurl")
                     : `⚠️ La URL es potencialmente peligrosa: ${url}\nDetalles: ${JSON.stringify(detalles)}`;
                 
                 const respuestaGPT = await enviarMensajeAGPT(mensajeGPT);
-                await flowDynamic(formatResponse(respuestaGPT));
+                await provider.sendMessage(phoneNumber, formatResponse(respuestaGPT), {});
             } catch (error) {
-                await flowDynamic(formatResponse(`❌ Ocurrió un error al verificar la URL: ${url}. Inténtalo de nuevo.`));
+                await provider.sendMessage(phoneNumber, formatResponse(`❌ Ocurrió un error al verificar la URL: ${url}. Inténtalo de nuevo.`), {});
             }
         }
     );

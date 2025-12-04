@@ -29,12 +29,10 @@ const main = async () => {
 
     adapterProvider.on('ready', () => {
         sessionState.isSessionReady = true;
-        console.log('✅ Sesión lista');
     });
 
     adapterProvider.on('close', () => {
         sessionState.isSessionReady = false;
-        console.log('❌ Sesión cerrada');
     });
 
     const { handleCtx, httpServer } = await createBot({
